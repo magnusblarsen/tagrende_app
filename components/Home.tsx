@@ -1,19 +1,20 @@
-import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { FIREBASE_AUTH } from '../../firebaseConfig'
-import { FirebaseError } from 'firebase/app'
+import { FIREBASE_AUTH } from '../firebaseConfig'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../App'
 
-const HomeScreen = () => {
-  const navigation = useNavigation()
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
+
+const Home: React.FC<Props> = ({route, navigation}) => {
 
   const handleSignOut = () => {
     FIREBASE_AUTH
       .signOut()
       .then(() => {
-        navigation.replace("Login")
+        navigation.navigate("Login")
       })
-      .catch(error => alert(error.message))
+      .catch(error => console.log(error))
   }
 
   return (
@@ -29,7 +30,7 @@ const HomeScreen = () => {
   )
 }
 
-export default HomeScreen
+export default Home
 
 const styles = StyleSheet.create({
   container: {
