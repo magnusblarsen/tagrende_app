@@ -22,7 +22,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Signup">
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
           <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
           <Stack.Screen name="Home" component={Home} />

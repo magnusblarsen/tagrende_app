@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, KeyboardAvoidingView, TextInput, StyleSheet } from 'react-native'
+import { View, Text, KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { FIREBASE_AUTH } from '../../firebaseConfig'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { TextInput, Surface, Button } from 'react-native-paper'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
 
 const Login: React.FC<Props> = ({ route, navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = () => {
     signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
@@ -32,24 +34,36 @@ const Login: React.FC<Props> = ({ route, navigation }) => {
 
   
   return (
-    <KeyboardAvoidingView 
-      style={styles.container}
-    >
-      <View>
+      <View style={styles.container}>
         <TextInput
-          placeholder='Email' 
+          mode='outlined'          
+          label='Email'
           value={email}
           onChangeText={setEmail}
+          style={styles.inputContainer}
         />
         <TextInput
-          placeholder='Password' 
+          mode='outlined'          
+          label='Password' 
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          style={styles.inputContainer}
         />
-
+        <Button
+          mode='contained'
+          style={{width: '80%', marginTop: 10, marginBottom: 4}}
+          loading={loading}
+          onPress={() => handleLogin}
+        >
+          Login
+        </Button>
+        <Button
+          onPress={() => navigation.navigate("Signup")}
+        >
+          Klik her hvis du ikke har en bruger!
+        </Button>
       </View>
-    </KeyboardAvoidingView>
   )
 }
 const styles = StyleSheet.create({
@@ -60,42 +74,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '80%'
-  },
-  input: {
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: '60%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  button: {
-    backgroundColor: '#0782F9',
-    width: '100%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonOutline: {
-    backgroundColor: 'white',
-    marginTop: 5,
-    borderColor: '#0782F9',
-    borderWidth: 2,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: '#0782F9',
-    fontWeight: '700',
-    fontSize: 16,
   },
 })
 

@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  KeyboardAvoidingView,
   StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
+import { TextInput, Button, Tooltip, IconButton, Text } from 'react-native-paper' 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
 
@@ -18,6 +15,7 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
   //TODO: also have username
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const unsubscribe = FIREBASE_AUTH.onAuthStateChanged((user) => {
@@ -39,35 +37,44 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
+      <View style={styles.container}>
+        <Text variant="titleLarge">
+          Hej med jer! 
+        </Text> 
+        <Text variant="bodyLarge" style={{marginBottom: 25}}>
+          Her kan i lave en bruger. 
+          Brugeren bliver lavet igennem Google, så i skal ikke være bange ift. sikkerheden,
+          da det ikke er mig der står for at gemme koderne i min egen server.
+        </Text>
         <TextInput
-          placeholder="Email"
+          mode='outlined'          
+          label='Email'
           value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
+          onChangeText={setEmail}
+          style={styles.inputContainer}
         />
         <TextInput
-          placeholder="Password"
+          mode='outlined'          
+          label='Password' 
           value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
+          onChangeText={setPassword}
           secureTextEntry
+          style={styles.inputContainer}
         />
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleSignUp} style={styles.button}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.replace("Login")}
-          style={[styles.button, styles.buttonOutline]}
+        <Button
+          mode='contained'
+          style={{width: '80%', marginTop: 10, marginBottom: 4}}
+          loading={loading}
+          onPress={() => handleSignUp}
         >
-          <Text style={styles.buttonOutlineText}>Navigate to login</Text>
-        </TouchableOpacity>
+          Signup
+        </Button>
+        <Button
+          onPress={() => navigation.navigate("Login")}
+        >
+          Klik her for at logge ind!
+        </Button>
       </View>
-    </KeyboardAvoidingView>
   );
 };
 
@@ -81,41 +88,5 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "80%",
-  },
-  input: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: "60%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
   },
 });
