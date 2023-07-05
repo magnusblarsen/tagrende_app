@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, KeyboardAvoidingView, StyleSheet } from 'react-native'
-import { FIREBASE_AUTH } from '../../firebaseConfig'
+import React, { useContext, useState } from 'react'
+import { View, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../Navigation'
-import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
-import { TextInput, Surface, Button } from 'react-native-paper'
+import { UserCredential } from 'firebase/auth'
+import { TextInput, Button } from 'react-native-paper'
 import { AuthContext } from '../../contexts/AuthProvider'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>

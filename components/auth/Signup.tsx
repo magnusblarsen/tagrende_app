@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   View,
 } from "react-native";
-import { FIREBASE_AUTH } from "../../firebaseConfig";
-import { UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
+import { UserCredential } from "firebase/auth";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../Navigation";
-import { TextInput, Button, Tooltip, IconButton, Text } from 'react-native-paper' 
+import { TextInput, Button, Text } from 'react-native-paper' 
 import { AuthContext } from "../../contexts/AuthProvider";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Signup">;

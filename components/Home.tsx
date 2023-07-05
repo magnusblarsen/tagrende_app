@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FIREBASE_AUTH } from '../firebaseConfig'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'

@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
-import AuthProvider, { AuthContext } from "./contexts/AuthProvider";
+import AuthProvider from "./contexts/AuthProvider";
 import Navigation from "./Navigation";
 
 
