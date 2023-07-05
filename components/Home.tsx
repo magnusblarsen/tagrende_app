@@ -1,26 +1,30 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FIREBASE_AUTH } from '../firebaseConfig'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../App'
+import { RootStackParamList } from '../Navigation'
+import { AuthContext } from '../contexts/AuthProvider'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home: React.FC<Props> = ({route, navigation}) => {
+  const { logout } = useContext(AuthContext)
+  const [loading, setLoading] = useState(false)
 
   const handleSignOut = () => {
-    FIREBASE_AUTH
-      .signOut()
+    setLoading(true)
+    logout()
+
       .then(() => {
-        navigation.navigate("Login")
+        console.log('Signed out')
       })
-      .catch(error => console.log(error))
+      .finally(() => setLoading(false))
   }
 
   return (
     <View style={styles.container}>
       <Text>Email: {FIREBASE_AUTH.currentUser?.email}</Text>
-      <TouchableOpacity
+      <TouchableOpacity //TODO: til button
         onPress={handleSignOut}
         style={styles.button}
       >

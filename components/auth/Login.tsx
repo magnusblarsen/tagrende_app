@@ -1,37 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { FIREBASE_AUTH } from '../../firebaseConfig'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../App'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { RootStackParamList } from '../../Navigation'
+import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
 import { TextInput, Surface, Button } from 'react-native-paper'
+import { AuthContext } from '../../contexts/AuthProvider'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
+
+//TODO: https://blog.logrocket.com/email-authentication-react-native-react-navigation-firebase/
 
 const Login: React.FC<Props> = ({ route, navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const { login } = useContext(AuthContext)
 
   const handleLogin = () => {
-    signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
-    .then(userCredentials => {
-      const user = userCredentials.user;
-      console.log('Logged in with:', user.email);
+    console.log('logging in...');
+    setLoading(true)
+    login(email, password)
+    .then((userCredentials: UserCredential) => {
+      const user = userCredentials.user
+      console.log('Logged in with:', user.email)
     })
-    .catch(error => console.log(error.message))
+    .finally(() => setLoading(false))
   }
-
-  useEffect(() => {
-    const unsubscribe = FIREBASE_AUTH.onAuthStateChanged(user => {
-      if (user) {
-        navigation.navigate('Home')
-      }
-    }) 
-    return unsubscribe
-  }, [])
-
-
   
   return (
       <View style={styles.container}>
@@ -54,7 +49,7 @@ const Login: React.FC<Props> = ({ route, navigation }) => {
           mode='contained'
           style={{width: '80%', marginTop: 10, marginBottom: 4}}
           loading={loading}
-          onPress={() => handleLogin}
+          onPress={handleLogin}
         >
           Login
         </Button>
@@ -77,4 +72,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Login  
+export default Login

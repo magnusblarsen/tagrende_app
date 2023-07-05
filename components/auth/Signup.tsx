@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
 } from "react-native";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../../Navigation";
 import { TextInput, Button, Tooltip, IconButton, Text } from 'react-native-paper' 
+import { AuthContext } from "../../contexts/AuthProvider";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
 
@@ -16,24 +17,19 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const unsubscribe = FIREBASE_AUTH.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("Home");
-      }
-    });
-
-    return unsubscribe;
-  }, []);
+  const {signup } = useContext(AuthContext)
 
   const handleSignUp = () => {
-    createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
-      .then((userCredentials) => {
+    console.log('trying to sign up')
+    setLoading(true)
+    signup(email, password)
+      .then((userCredentials:UserCredential) => {
         const user = userCredentials.user;
         console.log("Registered with:", user.email);
       })
-      .catch((error) => console.log(error.message));
+      .finally(() => {
+        setLoading(false)
+      })
   };
 
   return (
@@ -65,7 +61,7 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
           mode='contained'
           style={{width: '80%', marginTop: 10, marginBottom: 4}}
           loading={loading}
-          onPress={() => handleSignUp}
+          onPress={handleSignUp}
         >
           Signup
         </Button>
