@@ -38,8 +38,8 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
         </Text> 
         <Text variant="bodyLarge" style={{marginBottom: 25}}>
           Her kan i lave en bruger. 
-          Brugeren bliver lavet igennem Google, så i skal ikke være bange ift. sikkerheden,
-          da det ikke er mig der står for at gemme koderne i min egen server.
+          Brugeren bliver lavet gennem Google, så i skal ikke være bange ift. sikkerheden,
+          da det ikke er mig, der står for at gemme koderne i min egen server O_o.
         </Text>
         <TextInput
           mode='outlined'          
@@ -62,7 +62,7 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
           loading={loading}
           onPress={handleSignUp}
         >
-          Signup
+          Sign up
         </Button>
         <Button
           onPress={() => navigation.navigate("Login")}

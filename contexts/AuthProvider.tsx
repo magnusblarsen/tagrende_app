@@ -1,6 +1,7 @@
 import { User, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef} from 'react'
 import { FIREBASE_AUTH } from '../firebaseConfig';
+import Toast from 'react-native-root-toast';
 
 export const AuthContext = React.createContext<any>({})
 
@@ -14,6 +15,7 @@ const AuthProvider: React.FC<Props> = ({children}) => {
   useEffect(() => {
     const unsubscribe = FIREBASE_AUTH.onAuthStateChanged((user) => {
       if (user) {
+        const uid = user.uid //TODO
         setUser(user) 
       } else {
         setUser(null)
@@ -32,6 +34,9 @@ const AuthProvider: React.FC<Props> = ({children}) => {
       try {
         return await signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
       } catch (e) {
+        let toast = Toast.show('Request failed to send: ' + e, {
+          duration: Toast.durations.LONG,
+        });
         console.log(e);
       }
     },
@@ -39,13 +44,18 @@ const AuthProvider: React.FC<Props> = ({children}) => {
       try {
         return await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
       } catch (e) {
-        console.log(e);
+        let toast = Toast.show('Request failed to send: ' + e, {
+          duration: Toast.durations.LONG,
+        });
       }
     },
     logout: async () => {
       try {
         await signOut(FIREBASE_AUTH)
       } catch (e) {
+        let toast = Toast.show('Request failed to send: ' + e, {
+          duration: Toast.durations.LONG,
+        });
         console.log(e);
       }
     },

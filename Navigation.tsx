@@ -1,6 +1,4 @@
-import { View, Text } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import { FIREBASE_AUTH } from './firebaseConfig';
 import { AuthContext } from './contexts/AuthProvider';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from './components/Home';
