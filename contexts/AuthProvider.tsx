@@ -34,26 +34,20 @@ const AuthProvider: React.FC<Props> = ({children}) => {
       try {
         return await signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
       } catch (e) {
-        let toast = Toast.show('Request failed to send: ' + e, {
+        Toast.show('Request failed to send: ' + e, {
           duration: Toast.durations.LONG,
         });
         console.log(e);
       }
     },
     signup: async (email: string, password: string) => {
-      try {
-        return await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
-      } catch (e) {
-        let toast = Toast.show('Request failed to send: ' + e, {
-          duration: Toast.durations.LONG,
-        });
-      }
+      return createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
     },
     logout: async () => {
       try {
         await signOut(FIREBASE_AUTH)
       } catch (e) {
-        let toast = Toast.show('Request failed to send: ' + e, {
+        Toast.show('Request failed to send: ' + e, {
           duration: Toast.durations.LONG,
         });
         console.log(e);

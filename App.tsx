@@ -4,15 +4,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
 import AuthProvider from "./contexts/AuthProvider";
 import Navigation from "./Navigation";
-import { requestPermissions } from "./Location";
+// import { requestPermissions } from "./Location";
 import { RootSiblingParent } from 'react-native-root-siblings';
 
 //https://docs.expo.dev/build/setup/
 
 export default function App() {
-  useEffect(() => {
-    requestPermissions()
-  }, [])
+  // useEffect(() => {
+  //   requestPermissions()
+  // }, [])
 
   return (
     //for react-native-root-toast

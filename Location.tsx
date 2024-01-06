@@ -33,7 +33,7 @@ TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data, error }:any) => {
     const { locations } = data;
     const [location] = locations;
     try {
-      console.log(location)
+      // console.log(location)
       // const url = `https://<your-api-endpoint>`;
       //TODO: post to firebase 
       // await axios.post(url, { location }); // you should use post instead of get to persist data on the backend
