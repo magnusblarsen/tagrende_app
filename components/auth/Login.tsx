@@ -5,13 +5,15 @@ import { RootStackParamList } from '../../Navigation'
 import { UserCredential } from 'firebase/auth'
 import { TextInput, Button } from 'react-native-paper'
 import { AuthContext } from '../../contexts/AuthProvider'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { FIREBASE_DB } from '../../firebaseConfig'
+import Toast from 'react-native-root-toast'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
 
-//TODO: https://blog.logrocket.com/email-authentication-react-native-react-navigation-firebase/
-
 const Login: React.FC<Props> = ({ route, navigation }) => {
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const { login } = useContext(AuthContext)

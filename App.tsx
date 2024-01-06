@@ -6,6 +6,7 @@ import AuthProvider from "./contexts/AuthProvider";
 import Navigation from "./Navigation";
 // import { requestPermissions } from "./Location";
 import { RootSiblingParent } from 'react-native-root-siblings';
+import UserProvider from "./contexts/UserProvider";
 
 //https://docs.expo.dev/build/setup/
 
@@ -17,13 +18,15 @@ export default function App() {
   return (
     //for react-native-root-toast
     <RootSiblingParent>
-      <AuthProvider>
-        <PaperProvider>
-          <NavigationContainer>
-            <Navigation/>
-          </NavigationContainer>
-        </PaperProvider>
-      </AuthProvider> 
+      <UserProvider>
+        <AuthProvider>
+          <PaperProvider>
+            <NavigationContainer>
+              <Navigation/>
+            </NavigationContainer>
+          </PaperProvider>
+        </AuthProvider> 
+      </UserProvider>
     </RootSiblingParent>
   );
 }

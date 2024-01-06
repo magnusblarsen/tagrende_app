@@ -18,7 +18,7 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
-  const {signup } = useContext(AuthContext)
+  const { signup } = useContext(AuthContext)
   const [username, setUsername] = useState("")
 
 

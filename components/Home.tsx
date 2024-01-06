@@ -1,15 +1,18 @@
 import React, { useContext, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { FIREBASE_AUTH } from '../firebaseConfig'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../Navigation'
 import { AuthContext } from '../contexts/AuthProvider'
+import { Button } from 'react-native-paper'
+import { UserContext } from '../contexts/UserProvider'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home: React.FC<Props> = ({route, navigation}) => {
   const { logout } = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
+  const { username } = useContext(UserContext)
 
   const handleSignOut = () => {
     setLoading(true)
@@ -24,12 +27,12 @@ const Home: React.FC<Props> = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       <Text>Email: {FIREBASE_AUTH.currentUser?.email}</Text>
-      <TouchableOpacity //TODO: til button
+      <Text>Username: {username}</Text>
+      <Button
         onPress={handleSignOut}
-        style={styles.button}
       >
-        <Text style={styles.buttonText}>Sign out</Text>
-      </TouchableOpacity>
+        Sign out
+      </Button>
     </View>
   )
 }

@@ -22,7 +22,6 @@ export const requestPermissions = async () => {
 };
 
 
-
 // 1 define the task passing its name and a callback that will be called whenever the location changes
 TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data, error }:any) => {
   if (error) {

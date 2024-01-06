@@ -1,7 +1,8 @@
 import { User, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import React, { useEffect, useState, useRef} from 'react'
+import React, { useEffect, useState, useRef, useContext} from 'react'
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import Toast from 'react-native-root-toast';
+import { UserContext } from './UserProvider';
 
 export const AuthContext = React.createContext<any>({})
 
@@ -11,11 +12,14 @@ type Props = {
 
 const AuthProvider: React.FC<Props> = ({children}) => {
   const [user, setUser] = useState<User | null>(null)
+  const { updateUser } = useContext(UserContext)
 
   useEffect(() => {
     const unsubscribe = FIREBASE_AUTH.onAuthStateChanged((user) => {
+      console.log('Auth state changed')
+      updateUser(user)
+      
       if (user) {
-        const uid = user.uid //TODO
         setUser(user) 
       } else {
         setUser(null)
