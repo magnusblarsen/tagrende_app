@@ -9,7 +9,7 @@ import { UserContext } from '../contexts/UserProvider'
 
 import * as Location from 'expo-location';
 import Toast from 'react-native-root-toast'
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
 
@@ -47,25 +47,20 @@ const Home: React.FC<Props> = ({route, navigation}) => {
     let location = await Location.getCurrentPositionAsync()
     setLocation(location)
     if (location) {
-      Toast.show("Så er din lokation delt!")
-      // const q = query(collection(FIREBASE_DB, "users"), where("uid", "==", user.uid))
-      // const querySnapshot = getDocs(q).then((querySnapshot) => {
-      //   if(querySnapshot.docs.length === 0) {
-      //     addDoc(collection(FIREBASE_DB, "users"), {
-      //       uid: user.uid,
-      //       username: username,
-      //       email: user.email,
-      //     })
-      //   } else {
-      //     console.log("User already exists")
-      //   }
 
-      // }).catch((e) => {
-      //   console.error("Error adding document: ", e)
-      //   Toast.show('Error connection to database: ' + e, {
-      //     duration: Toast.durations.LONG,
-      //   });
-      // })
+      const userRef = doc(FIREBASE_DB, "users", user.uid)
+      try {
+        await updateDoc(userRef, {
+          location: {
+            timestamp: location.timestamp,
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          }
+        })
+        Toast.show("Så er din lokation delt!")
+      } catch (error) {
+        Toast.show("Kunne ikke dele lokation: " + error)
+      }
     }
   }
 

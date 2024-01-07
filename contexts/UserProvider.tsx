@@ -31,7 +31,6 @@ const UserProvider: React.FC<Props> = ({children}) => {
       } else {
         setUsername(null)
         setLocation(null)
-        Toast.show("Kunne ikke finde brugerdata... kontakt Magnus!!")
       };
 
     },
