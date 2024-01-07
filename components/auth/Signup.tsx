@@ -8,7 +8,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../Navigation";
 import { TextInput, Button, Text } from 'react-native-paper' 
 import { AuthContext } from "../../contexts/AuthProvider";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore"
+import { collection, addDoc, query, where, getDocs, setDoc, doc } from "firebase/firestore"
 import { FIREBASE_DB } from "../../firebaseConfig";
 import Toast from "react-native-root-toast";
 
@@ -32,35 +32,20 @@ const Signup: React.FC<Props> = ({ route, navigation }) => {
       setLoading(false)
       return;
     }
+
     signup(email, password)
       .then((userCredentials:UserCredential) => {
         const user = userCredentials.user;
         console.log("Registered with:", user.email);
 
-        const q = query(collection(FIREBASE_DB, "users"), where("uid", "==", user.uid))
-        const querySnapshot = getDocs(q).then((querySnapshot) => {
-          if(querySnapshot.docs.length === 0) {
-            addDoc(collection(FIREBASE_DB, "users"), {
-              uid: user.uid,
-              username: username,
-              email: user.email,
-            })
-          } else {
-            console.log("User already exists")
-          }
 
-        }).catch((e) => {
-          console.error("Error adding document: ", e)
-          Toast.show('Error connection to database: ' + e, {
-            duration: Toast.durations.LONG,
-          });
-        })
-
-
-        const docRef = addDoc(collection(FIREBASE_DB, "users"), {
-          uid: user.uid,
+        setDoc(doc(FIREBASE_DB, "users", user.uid), {
           username: username,
+          email: user.email,
+        }).catch((error:any) => {
+          Toast.show("Error setting user data: " + error)
         })
+
 
       }).catch((error:any) => {
         Toast.show('Request failed to send: ' + error, {

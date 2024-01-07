@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Platform, StyleSheet, Text, View } from 'react-native'
-import { FIREBASE_AUTH } from '../firebaseConfig'
+import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../Navigation'
 import { AuthContext } from '../contexts/AuthProvider'
@@ -9,13 +9,14 @@ import { UserContext } from '../contexts/UserProvider'
 
 import * as Location from 'expo-location';
 import Toast from 'react-native-root-toast'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 // TODO: https://docs.expo.dev/versions/latest/sdk/location/ (see background location methods for requeriments)
 
 const Home: React.FC<Props> = ({route, navigation}) => {
-  const { logout } = useContext(AuthContext)
+  const { logout, user } = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
   const { username } = useContext(UserContext)
 
@@ -47,6 +48,24 @@ const Home: React.FC<Props> = ({route, navigation}) => {
     setLocation(location)
     if (location) {
       Toast.show("Så er din lokation delt!")
+      // const q = query(collection(FIREBASE_DB, "users"), where("uid", "==", user.uid))
+      // const querySnapshot = getDocs(q).then((querySnapshot) => {
+      //   if(querySnapshot.docs.length === 0) {
+      //     addDoc(collection(FIREBASE_DB, "users"), {
+      //       uid: user.uid,
+      //       username: username,
+      //       email: user.email,
+      //     })
+      //   } else {
+      //     console.log("User already exists")
+      //   }
+
+      // }).catch((e) => {
+      //   console.error("Error adding document: ", e)
+      //   Toast.show('Error connection to database: ' + e, {
+      //     duration: Toast.durations.LONG,
+      //   });
+      // })
     }
   }
 

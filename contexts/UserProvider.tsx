@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext} from 'react'
 import { AuthContext } from './AuthProvider'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { collection, doc, getDoc, query, where } from 'firebase/firestore'
 import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig'
 import Toast from 'react-native-root-toast'
 import { User } from 'firebase/auth'
@@ -18,24 +18,20 @@ const UserProvider: React.FC<Props> = ({children}) => {
   const contextValues = {
     username,
     location,
-    updateUser: (user: User | null) => {
+    updateUser: async (user: User | null) => {
       if (user) {
         console.log('UserProvider: Auth state changed')
-        const q = query(collection(FIREBASE_DB, "users"), where("uid", "==", user.uid))
-        const querySnapshot = getDocs(q).then((querySnapshot) => {
-          if(querySnapshot.docs.length === 0) {
-            Toast.show('No user info found', {
-              duration: Toast.durations.LONG,
-            });
-          } else {
-            const doc = querySnapshot.docs[0]
-            console.log(doc.data())
-            setUsername(doc.data().username)
-          }
-        })
+        const docRef = doc(FIREBASE_DB, "users", user.uid)
+        const docSnap = await getDoc(docRef)
+
+        if (docSnap.exists()) {
+          setUsername(docSnap.data().username)
+        }
+
       } else {
         setUsername(null)
         setLocation(null)
+        Toast.show("Kunne ikke finde brugerdata... kontakt Magnus!!")
       };
 
     },
