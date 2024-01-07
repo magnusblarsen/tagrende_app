@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { FIREBASE_AUTH } from '../firebaseConfig'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../Navigation'
@@ -7,21 +7,47 @@ import { AuthContext } from '../contexts/AuthProvider'
 import { Button } from 'react-native-paper'
 import { UserContext } from '../contexts/UserProvider'
 
+import * as Location from 'expo-location';
+import Toast from 'react-native-root-toast'
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
+
+// TODO: https://docs.expo.dev/versions/latest/sdk/location/ (see background location methods for requeriments)
 
 const Home: React.FC<Props> = ({route, navigation}) => {
   const { logout } = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
   const { username } = useContext(UserContext)
 
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<String | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Tilladelse til lokation ikke givet... gå til indstillinger og fix det!');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, [])
+
   const handleSignOut = () => {
     setLoading(true)
     logout()
-
       .then(() => {
         console.log('Signed out')
       })
       .finally(() => setLoading(false))
+  }
+  const handleLocationSharing = async () => { 
+    let location = await Location.getCurrentPositionAsync()
+    setLocation(location)
+    if (location) {
+      Toast.show("Så er din lokation delt!")
+    }
   }
 
   return (
@@ -29,10 +55,23 @@ const Home: React.FC<Props> = ({route, navigation}) => {
       <Text>Email: {FIREBASE_AUTH.currentUser?.email}</Text>
       <Text>Username: {username}</Text>
       <Button
+        mode='contained'
         onPress={handleSignOut}
+        loading={loading}
+        style={{marginTop: 20}}
       >
         Sign out
       </Button>
+      <Button
+        mode='contained'
+        onPress={handleLocationSharing}
+        style={{marginTop: 20}}
+      >
+        Test location
+      </Button>
+      <Text
+        style={{marginTop: 20}}
+      >{errorMsg? errorMsg: JSON.stringify(location)}</Text>
     </View>
   )
 }
